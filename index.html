@@ -3,144 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SimpleApps05 — Android Apps by Jay</title>
+<title>SimpleApps05 · Android Apps by Jay</title>
 <meta name="description" content="Android apps by SimpleApps05: Dice and ChainSum, built in Kotlin and Jetpack Compose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fafafa;
-    --fg: #1a1a1a;
-    --muted: #5a5a5a;
-    --card-bg: #ffffff;
-    --border: #e2e2e2;
-    --accent: #2f6fed;
+    --bg: #0b0d10;
+    --bg-raised: #14171b;
+    --border: #242830;
+    --fg: #e7e5e0;
+    --fg-dim: #8a8f98;
+    --fg-faint: #565b64;
+    --accent-live: #6fcf97;
+    --accent-live-dim: #6fcf9722;
+    --accent-dev: #e8a33d;
+    --accent-dev-dim: #e8a33d22;
+    --serif: 'Fraunces', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   }
-  @media (prefers-color-scheme: dark) {
+
+  @media (prefers-color-scheme: light) {
     :root {
-      --bg: #12141a;
-      --fg: #eaeaea;
-      --muted: #a0a0a8;
-      --card-bg: #1b1e26;
-      --border: #2a2d36;
-      --accent: #6d9bff;
+      --bg: #faf9f6;
+      --bg-raised: #ffffff;
+      --border: #e4e1d9;
+      --fg: #1b1c1e;
+      --fg-dim: #62666e;
+      --fg-faint: #9a9da4;
+      --accent-live: #2f8f5b;
+      --accent-live-dim: #2f8f5b1a;
+      --accent-dev: #a86c14;
+      --accent-dev-dim: #a86c141a;
     }
   }
+
   * { box-sizing: border-box; }
+
   body {
     margin: 0;
-    background: var(--bg);
+    background-color: var(--bg);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/></svg>");
+    background-size: 180px;
     color: var(--fg);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.55;
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
   }
+  @media (prefers-color-scheme: light) {
+    body { background-image: none; }
+  }
+
   .wrap {
-    max-width: 760px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 56px 20px 80px;
+    padding: 80px 24px 100px;
   }
-  header h1 {
-    font-size: 1.6rem;
-    margin: 0 0 4px;
-  }
-  header p.tagline {
-    color: var(--muted);
-    margin: 0 0 32px;
-    font-size: 1rem;
-  }
-  section {
-    margin-bottom: 40px;
-  }
-  section h2 {
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
-  }
-  .app-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
-  }
-  .app-card h3 {
-    margin: 0 0 6px;
-    font-size: 1.05rem;
-  }
-  .app-card p {
-    margin: 0 0 12px;
-    color: var(--muted);
-    font-size: 0.95rem;
-  }
-  .app-card .status {
-    display: inline-block;
-    font-size: 0.75rem;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--border);
-    color: var(--muted);
+
+  .prompt-line {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--fg-faint);
+    letter-spacing: 0.02em;
     margin-bottom: 10px;
   }
-  .links a {
-    color: var(--accent);
+  .prompt-line .sym { color: var(--accent-live); margin-right: 8px; }
+
+  header {
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: rise 0.6s ease-out forwards;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 3.2rem);
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    font-optical-sizing: auto;
+  }
+
+  .subtitle {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--fg-dim);
+    max-width: 46ch;
+    line-height: 1.6;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--fg-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+
+  section { margin-bottom: 56px; }
+  section.reveal {
+    opacity: 0;
+    animation: rise 0.6s ease-out forwards;
+  }
+  .apps.reveal { animation-delay: 0.12s; }
+  footer.reveal { animation-delay: 0.22s; }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .app-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 22px 24px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .app-card:hover {
+    border-color: var(--fg-faint);
+    transform: translateY(-2px);
+  }
+  .app-card[data-status="live"]:hover { border-color: var(--accent-live); }
+  .app-card[data-status="dev"]:hover { border-color: var(--accent-dev); }
+
+  .app-card-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .app-icon {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-dim);
+    overflow: hidden;
+  }
+  .app-icon svg { width: 22px; height: 22px; }
+  .app-icon.has-image {
+    border: none;
+    background: none;
+    border-radius: 10px;
+  }
+  .app-icon.has-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .app-card h2 {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+
+  .status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    padding: 2px 8px 2px 6px;
+    border-radius: 3px;
+  }
+  .status-tag .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .status-live { color: var(--accent-live); background: var(--accent-live-dim); }
+  .status-live .dot { background: var(--accent-live); box-shadow: 0 0 0 3px var(--accent-live-dim); }
+  .status-dev { color: var(--accent-dev); background: var(--accent-dev-dim); }
+  .status-dev .dot { background: var(--accent-dev); box-shadow: 0 0 0 3px var(--accent-dev-dim); }
+
+  .app-card p.desc {
+    color: var(--fg-dim);
+    font-size: 0.96rem;
+    margin: 0 0 16px;
+    flex: 1;
+  }
+
+  .app-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    margin-top: auto;
+  }
+  .app-note {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--fg-faint);
+    margin-top: auto;
+  }
+  .app-links a {
+    color: var(--fg);
     text-decoration: none;
-    font-size: 0.9rem;
-    margin-right: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+    transition: border-color 0.2s ease, color 0.2s ease;
   }
-  .links a:hover { text-decoration: underline; }
-  footer {
-    color: var(--muted);
+  .app-links a:hover { color: var(--accent-live); border-color: var(--accent-live); }
+
+  .app-note a {
+    color: var(--fg-dim);
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    padding-bottom: 1px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .app-note a:hover { color: var(--accent-dev); border-color: var(--accent-dev); }
+
+  footer .footer-links {
+    display: flex;
+    gap: 24px;
+    font-family: var(--mono);
     font-size: 0.85rem;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
   }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
+  footer a {
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  footer a:hover { color: var(--accent-live); }
+  footer a::before { content: "--"; color: var(--fg-faint); }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .app-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 56px 18px 80px; }
+    .app-card-head { align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
+    <div class="prompt-line"><span class="sym">$</span>whoami</div>
     <h1>SimpleApps05</h1>
-    <p class="tagline">Android apps built by Jay — IT specialist, Kotlin &amp; Jetpack Compose.</p>
+    <p class="subtitle">A solo indie developer based in Singapore, building in Kotlin and Jetpack Compose.</p>
   </header>
 
-  <section>
-    <h2>Apps</h2>
+  <section class="apps reveal">
+    <div class="section-label">apps</div>
+    <div class="app-grid">
 
-    <div class="app-card">
-      <span class="status">Internal / closed testing</span>
-      <h3>Dice</h3>
-      <p>A simple, offline dice-rolling app. No accounts, no ads, no data collection — everything stays on your device.</p>
-      <div class="links">
-        <!-- TODO: replace with the live Play Store listing URL once Dice is public -->
-        <a href="#">Play Store</a>
-        <a href="dice-privacy/">Privacy Policy</a>
-      </div>
-    </div>
+      <article class="app-card" data-status="live">
+        <div class="app-card-head">
+          <div class="app-icon has-image">
+            <img src="chainsum-icon.png" alt="ChainSum app icon">
+          </div>
+          <div>
+            <h2>ChainSum</h2>
+            <span class="status-tag status-live"><span class="dot"></span>production</span>
+          </div>
+        </div>
+        <p class="desc">ChainSum is a number puzzle game where you connect adjacent cells on a grid to reach a target sum. Simple to learn, satisfying to master.</p>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.simpleapps05.chainsum">play store</a>
+          <a href="chainsum/privacy-policy.html">privacy policy</a>
+        </div>
+      </article>
 
-    <div class="app-card">
-      <span class="status">Closed testing</span>
-      <h3>ChainSum</h3>
-      <p>A number-path puzzle game. Built with Kotlin, Jetpack Compose, and Room.</p>
-      <div class="links">
-        <!-- TODO: replace with the live Play Store listing URL -->
-        <a href="#">Play Store</a>
-        <a href="chainsum/">Privacy Policy</a>
-      </div>
+      <article class="app-card" data-status="dev">
+        <div class="app-card-head">
+          <div class="app-icon has-image">
+            <img src="dice-icon.png" alt="Dice app icon">
+          </div>
+          <div>
+            <h2>Dice</h2>
+            <span class="status-tag status-dev"><span class="dot"></span>internal testing</span>
+          </div>
+        </div>
+        <p class="desc">A simple, offline dice-rolling app. No accounts, no ads, no data collection: everything stays on your device.</p>
+        <p class="app-note">not public yet, email <a href="mailto:simpleapps05@gmail.com">simpleapps05@gmail.com</a> for details</p>
+      </article>
+
     </div>
   </section>
 
-  <section>
-    <h2>About</h2>
-    <p>I'm Jay, an IT specialist based in Singapore, currently completing a BSc (Hons) in Computer Science at Birmingham City University. Outside of my day job I build and publish Android apps under the SimpleApps05 name.</p>
-  </section>
-
-  <footer>
-    <p>
-      <a href="https://github.com/SimpleApps05">GitHub</a> ·
-      <a href="mailto:simpleapps05@gmail.com">Contact</a>
-    </p>
+  <footer class="reveal">
+    <div class="section-label">contact</div>
+    <div class="footer-links">
+      <a href="https://github.com/SimpleApps05">github</a>
+      <a href="mailto:simpleapps05@gmail.com">email</a>
+    </div>
   </footer>
 
 </div>
