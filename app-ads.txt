@@ -1,0 +1,5 @@
+# app-ads.txt for simpleapps05.github.io
+# Get your exact line from AdMob: https://apps.admob.com/v2/apps/appadstxt
+# It will look like the example below, with YOUR publisher ID (not this placeholder).
+# Replace the line below before publishing — a placeholder pub- ID will not verify.
+google.com, pub-9581946817191075, DIRECT, f08c47fec0942fa0
